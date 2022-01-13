@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,94 +21,88 @@ const TodoList = styled('div')`
 //   done: false,
 // };
 
-class App extends React.Component {
-	state = {
-		filterStatus: 'Все', // deleted, done
-		filterValue: '',
-		todoList: JSON.parse(localStorage.getItem('todolist')) || [],
-		deletedTodo: JSON.parse(localStorage.getItem('deletedtodo')) || [],
-	};
-	componentDidUpdate() {
-		localStorage.setItem('todolist', JSON.stringify(this.state.todoList));
-		localStorage.setItem('deletedtodo', JSON.stringify(this.state.deletedTodo));
-	}
-	handleCreateTodo = (name) => {
-		this.setState({
-			todoList: this.state.todoList.concat({ name, done: false, id: uuidv4() }),
-		});
-	};
-	handleDone = (id) => {
-		this.setState({
-			todoList: this.state.todoList.map((todo) =>
-				todo.id === id ? { ...todo, done: true } : todo
-			),
-		});
-	};
-	handleDeleteodo = (id) => {
-		this.setState({
-			todoList: this.state.todoList.filter((todo) => todo.id !== id),
-			deletedTodo: this.state.deletedTodo.concat(
-				this.state.todoList.filter((todo) => todo.id === id)
-			),
-		});
-	};
-	handleChangeFilterStatus = (filterStatus) => {
-		this.setState(() => ({ filterStatus: filterStatus }));
-	};
+const App = () => {
+	const [todoList, setTodoList] = useState(
+		JSON.parse(localStorage.getItem('todolist')) || []
+	);
+	const [deletedTodo, setDeletedTodo] = useState(
+		JSON.parse(localStorage.getItem('deletedtodo')) || []
+	);
+	const [filterStatus, setFilteredStatus] = useState('Все');
+	const [filterValue, setFilteredValue] = useState('');
+	useEffect(() => {
+		localStorage.setItem('todolist', JSON.stringify(todoList));
+	}, [todoList]);
+	useEffect(() => {
+		localStorage.setItem('deletedtodo', JSON.stringify(deletedTodo));
+	}, [deletedTodo]);
 
-	handleChangeFilterValue = (value) => {
-		this.setState(() => ({ filterValue: value }));
+	const handleCreateTodo = (name) => {
+		setTodoList(todoList.concat({ name, done: false, id: uuidv4() }));
 	};
-
-	render() {
-		const { todoList, deletedTodo, filterStatus, filterValue } = this.state;
-
-		const filterListByStatus = () => {
-			if (filterStatus === 'Удалённые') {
-				return deletedTodo;
-			}
-			if (filterStatus === 'Выполненные') {
-				return todoList.filter((todo) => todo.done === true);
-			} else {
-				return todoList;
-			}
-		};
-		const filterListByValue = (list) => {
-			return list.filter((todo) =>
-				todo.name.toLowerCase().includes(filterValue.toLowerCase())
-			);
-		};
-		const filteredList = filterListByValue(filterListByStatus());
-
-		return (
-			<TodoList>
-				<Header list={filteredList} />
-				{(todoList.length > 0 || deletedTodo.length > 0) && (
-					<>
-						<section>
-							<Filter
-              filterStatus={filterStatus}
-								list={filteredList}
-								deleted={deletedTodo}
-								filtered={filterStatus}
-								onChangeFilteredStatus={this.handleChangeFilterStatus}
-								onChangeFilteredValue={this.handleChangeFilterValue}
-							/>
-						</section>
-						<List
-							list={filteredList}
-							onDeleteTodo={this.handleDeleteodo}
-							onDoneTodo={this.handleDone}
-						/>
-					</>
-				)}
-
-				<section>
-					<Form onCreateTodo={this.handleCreateTodo} />
-				</section>
-			</TodoList>
+	const handleDone = (id) => {
+		setTodoList(
+			todoList.map((todo) => (todo.id === id ? { ...todo, done: true } : todo))
 		);
-	}
-}
+	};
+	const handleDeleteodo = (id) => {
+		setDeletedTodo(
+			deletedTodo.concat(todoList.filter((todo) => todo.id === id))
+		);
+		setTodoList(todoList.filter((todo) => todo.id !== id));
+	};
+	const handleChangeFilterStatus = (filterStatus) => {
+		setFilteredStatus(filterStatus);
+	};
+
+	const handleChangeFilterValue = (value) => {
+		setFilteredValue(value);
+	};
+	const filterListByStatus = () => {
+		if (filterStatus === 'Удалённые') {
+			return deletedTodo;
+		}
+		if (filterStatus === 'Выполненные') {
+			return todoList.filter((todo) => todo.done === true);
+		} else {
+			return todoList;
+		}
+	};
+	const filterListByValue = (list) => {
+		return list.filter((todo) =>
+			todo.name.toLowerCase().includes(filterValue.toLowerCase())
+		);
+	};
+	const filteredList = filterListByValue(filterListByStatus());
+
+	return (
+		<TodoList>
+			<Header list={filteredList} />
+			{(todoList.length > 0 || deletedTodo.length > 0) && (
+				<>
+					<section>
+						<Filter
+							filterStatus={filterStatus}
+							list={filteredList}
+							deleted={deletedTodo}
+							filtered={filterStatus}
+							onChangeFilteredStatus={handleChangeFilterStatus}
+							onChangeFilteredValue={handleChangeFilterValue}
+						/>
+					</section>
+					<List
+						list={filteredList}
+						onDeleteTodo={handleDeleteodo}
+						onDoneTodo={handleDone}
+					/>
+				</>
+			)}
+
+			<section>
+				<Form onCreateTodo={handleCreateTodo} />
+			</section>
+		</TodoList>
+	);
+};
 
 export default App;

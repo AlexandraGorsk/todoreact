@@ -24,56 +24,55 @@ const ButtonsGroup = styled('div')`
 	}
 `;
 
-class Filter extends React.Component {
-	handleChange = (e) => {
-		const { onChangeFilteredStatus } = this.props;
+const Filter = ({
+	onChangeFilteredStatus,
+	onChangeFilteredValue,
+	filterStatus,
+}) => {
+	const handleChange = (e) => {
 		const fiterStatus = e.target.textContent; //onChangeFilteredStatus(e.target.textContent)
 		onChangeFilteredStatus(fiterStatus);
 	};
-	handleFilter = (e) => {
-		const { onChangeFilteredValue } = this.props;
+	const handleFilter = (e) => {
 		const value = e.target.value;
 		onChangeFilteredValue(value);
 	};
-	render() {
-		const { filterStatus } = this.props;
-		return (
-			<FilterForm>
-				<Input
-					label='Поиск по названию'
-					id='search'
-					placeholder='Начни вводить'
-					onChange={this.handleFilter}
-				/>
-				<ButtonsGroup>
-					<Button
-						variant='contained'
-						type='button'
-						onClick={this.handleChange}
-						active={filterStatus === 'Все' && 'active'}
-					>
-						Все
-					</Button>
-					<Button
-						variant='contained'
-						type='button'
-						onClick={this.handleChange}
-						active={filterStatus === 'Выполненные' && 'active'}
-					>
-						Выполненные
-					</Button>
-					<Button
-						variant='contained'
-						type='button'
-						onClick={this.handleChange}
-						active={filterStatus === 'Удалённые' && 'active'}
-					>
-						Удалённые
-					</Button>
-				</ButtonsGroup>
-			</FilterForm>
-		);
-	}
-}
+	return (
+		<FilterForm>
+			<Input
+				label='Поиск по названию'
+				id='search'
+				placeholder='Начни вводить'
+				onChange={handleFilter}
+			/>
+			<ButtonsGroup>
+				<Button
+					variant='contained'
+					type='button'
+					onClick={handleChange}
+					active={filterStatus === 'Все' && 'active'}
+				>
+					Все
+				</Button>
+				<Button
+					variant='contained'
+					type='button'
+					onClick={handleChange}
+					active={filterStatus === 'Выполненные' && 'active'}
+				>
+					Выполненные
+				</Button>
+				<Button
+					variant='contained'
+					type='button'
+					onClick={handleChange}
+					active={filterStatus === 'Удалённые' && 'active'}
+				>
+					Удалённые
+				</Button>
+			</ButtonsGroup>
+		</FilterForm>
+	);
+};
 
 export default Filter;

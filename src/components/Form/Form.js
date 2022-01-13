@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { validateForm } from './helpers/validateForm';
 import Button from '../Button';
@@ -15,69 +15,57 @@ const FormContainer = styled('form')`
 		margin-top: 8px;
 	}
 `;
+const Form = ({ onCreateTodo }) => {
+	const [name, setName] = useState('');
+	const [error, setError] = useState(validateForm(''));
+	const [touched, setTouched] = useState(false);
 
-class Form extends React.Component {
-	state = {
-		name: '',
-		error: validateForm(''),
-		touched: false,
+	const handleChange = (e) => {
+		setName(e.target.value);
+		setError(validateForm(e.target.value));
 	};
-
-	handleChange = (e) => {
-		this.setState({
-			[e.target.name]: e.target.value,
-			error: validateForm(e.target.value),
-		});
+	const handleBlur = () => {
+		setTouched(true);
 	};
-	handleBlur = () => {
-		this.setState({
-			touched: true,
-		});
-	};
-	handleSubmit = (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const { onCreateTodo } = this.props;
-		const { name, error,touched } = this.state;
-    if (!touched){
-      this.setState({touched:true})
-    }
+		if (!touched) {
+			setTouched(true);
+		}
 		if (!error) {
 			onCreateTodo(name);
-
-			this.setState({ name: '', error: validateForm(''), touched:false });
+			setName('');
+			setError(validateForm(''));
+			setTouched(false);
 		}
 	};
 
-	render() {
-		const { name, error, touched } = this.state;
-
-		return (
-			<FormContainer>
-				<Input
-					name='name'
-					label='Новое задание'
-					id='create'
-					error={!!touched && !!error}
-					description={touched && error}
-					placeholder='Название'
-					value={name}
-					onChange={this.handleChange}
-					onBlur={this.handleBlur}
-				/>
-				<div>
-					<Button
-						onClick={this.handleSubmit}
-						variant='contained'
-						size='large'
-						type='submit'
-					>
-						Создать
-					</Button>
-				</div>
-			</FormContainer>
-		);
-	}
-}
+	return (
+		<FormContainer>
+			<Input
+				name='name'
+				label='Новое задание'
+				id='create'
+				error={!!touched && !!error}
+				description={touched && error}
+				placeholder='Название'
+				value={name}
+				onChange={handleChange}
+				onBlur={handleBlur}
+			/>
+			<div>
+				<Button
+					onClick={handleSubmit}
+					variant='contained'
+					size='large'
+					type='submit'
+				>
+					Создать
+				</Button>
+			</div>
+		</FormContainer>
+	);
+};
 
 export default Form;
