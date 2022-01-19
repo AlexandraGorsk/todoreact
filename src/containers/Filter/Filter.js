@@ -1,8 +1,11 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import Button from '../Button';
-import Input from '../Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { getSlice } from '../../store/todo';
+import { setFilterStatus, setFilterValue } from '../../store/todo';
 
 const FilterForm = styled('form')`
 	padding: 12px 16px;
@@ -24,18 +27,14 @@ const ButtonsGroup = styled('div')`
 	}
 `;
 
-const Filter = ({
-	onChangeFilteredStatus,
-	onChangeFilteredValue,
-	filterStatus,
-}) => {
+const Filter = () => {
+	const dispatch = useDispatch();
+	const { filterStatus } = useSelector(getSlice);
 	const handleChange = (e) => {
-		const fiterStatus = e.target.textContent; //onChangeFilteredStatus(e.target.textContent)
-		onChangeFilteredStatus(fiterStatus);
+		dispatch(setFilterStatus(e.target.name));
 	};
 	const handleFilter = (e) => {
-		const value = e.target.value;
-		onChangeFilteredValue(value);
+		dispatch(setFilterValue(e.target.value));
 	};
 	return (
 		<FilterForm>
@@ -49,6 +48,7 @@ const Filter = ({
 				<Button
 					variant='contained'
 					type='button'
+					name='Все'
 					onClick={handleChange}
 					active={filterStatus === 'Все' && 'active'}
 				>
@@ -57,6 +57,7 @@ const Filter = ({
 				<Button
 					variant='contained'
 					type='button'
+					name='Выполненные'
 					onClick={handleChange}
 					active={filterStatus === 'Выполненные' && 'active'}
 				>
@@ -65,6 +66,7 @@ const Filter = ({
 				<Button
 					variant='contained'
 					type='button'
+					name='Удалённые'
 					onClick={handleChange}
 					active={filterStatus === 'Удалённые' && 'active'}
 				>

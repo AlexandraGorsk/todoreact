@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { validateForm } from './helpers/validateForm';
-import Button from '../Button';
-import Input from '../Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { useDispatch } from 'react-redux';
+import { createTodo } from '../../store/todo';
 
 const FormContainer = styled('form')`
 	padding: 12px 16px;
@@ -15,7 +17,8 @@ const FormContainer = styled('form')`
 		margin-top: 8px;
 	}
 `;
-const Form = ({ onCreateTodo }) => {
+const Form = () => {
+	const dispatch = useDispatch();
 	const [name, setName] = useState('');
 	const [error, setError] = useState(validateForm(''));
 	const [touched, setTouched] = useState(false);
@@ -34,7 +37,7 @@ const Form = ({ onCreateTodo }) => {
 			setTouched(true);
 		}
 		if (!error) {
-			onCreateTodo(name);
+			dispatch(createTodo(name));
 			setName('');
 			setError(validateForm(''));
 			setTouched(false);
