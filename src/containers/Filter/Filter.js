@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useLocales } from '../../providers/LocalesProvider';
 import { getSlice } from '../../store/todo';
 import { setFilterStatus, setFilterValue } from '../../store/todo';
 
@@ -28,6 +29,8 @@ const ButtonsGroup = styled('div')`
 `;
 
 const Filter = () => {
+	const { trans } = useLocales();
+	const { filter, buttons } = trans;
 	const dispatch = useDispatch();
 	const { filterStatus } = useSelector(getSlice);
 	const handleChange = (e) => {
@@ -39,20 +42,20 @@ const Filter = () => {
 	return (
 		<FilterForm>
 			<Input
-				label='Поиск по названию'
+				label={filter.title}
 				id='search'
-				placeholder='Начни вводить'
+				placeholder={filter.placeholder}
 				onChange={handleFilter}
 			/>
 			<ButtonsGroup>
 				<Button
 					variant='contained'
 					type='button'
-					name='Все'
+					name="'Все'"
 					onClick={handleChange}
 					active={filterStatus === 'Все' && 'active'}
 				>
-					Все
+					{buttons.filteredAll}
 				</Button>
 				<Button
 					variant='contained'
@@ -61,7 +64,7 @@ const Filter = () => {
 					onClick={handleChange}
 					active={filterStatus === 'Выполненные' && 'active'}
 				>
-					Выполненные
+					{buttons.filteredDone}
 				</Button>
 				<Button
 					variant='contained'
@@ -70,7 +73,7 @@ const Filter = () => {
 					onClick={handleChange}
 					active={filterStatus === 'Удалённые' && 'active'}
 				>
-					Удалённые
+					{buttons.filteredDeleted}
 				</Button>
 			</ButtonsGroup>
 		</FilterForm>

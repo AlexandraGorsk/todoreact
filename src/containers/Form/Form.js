@@ -5,6 +5,7 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useDispatch } from 'react-redux';
 import { createTodo } from '../../store/todo';
+import { useLocales } from '../../providers/LocalesProvider';
 
 const FormContainer = styled('form')`
 	padding: 12px 16px;
@@ -18,6 +19,8 @@ const FormContainer = styled('form')`
 	}
 `;
 const Form = () => {
+	const { trans } = useLocales();
+	const { form, buttons } = trans;
 	const dispatch = useDispatch();
 	const [name, setName] = useState('');
 	const [error, setError] = useState(validateForm(''));
@@ -48,11 +51,11 @@ const Form = () => {
 		<FormContainer>
 			<Input
 				name='name'
-				label='Новое задание'
+				label={form.newTodo}
 				id='create'
 				error={!!touched && !!error}
 				description={touched && error}
-				placeholder='Название'
+				placeholder={form.placeholder}
 				value={name}
 				onChange={handleChange}
 				onBlur={handleBlur}
@@ -64,7 +67,7 @@ const Form = () => {
 					size='large'
 					type='submit'
 				>
-					Создать
+					{buttons.create}
 				</Button>
 			</div>
 		</FormContainer>

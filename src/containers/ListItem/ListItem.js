@@ -2,9 +2,12 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import Button from '../../components/Button';
+import { useLocales } from '../../providers/LocalesProvider';
 import { deletedTodo, doneTodo } from '../../store/todo';
 
 const ListItem = ({ name, id, done }) => {
+	const { trans } = useLocales();
+	const { buttons, list } = trans;
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {
@@ -24,7 +27,7 @@ const ListItem = ({ name, id, done }) => {
 						size='small'
 						type='button'
 					>
-						Выполнено
+						{buttons.done}
 					</Button>
 				)}
 				<Button
@@ -33,7 +36,7 @@ const ListItem = ({ name, id, done }) => {
 					size='small'
 					type='button'
 				>
-					Удалить
+					{buttons.delete}
 				</Button>
 			</div>
 		</li>
