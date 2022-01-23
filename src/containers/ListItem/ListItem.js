@@ -4,10 +4,11 @@ import { useDispatch } from 'react-redux';
 import Button from '../../components/Button';
 import { useLocales } from '../../providers/LocalesProvider';
 import { deletedTodo, doneTodo } from '../../store/todo';
+import { ListIt } from './ListItem.styles';
 
 const ListItem = ({ name, id, done }) => {
 	const { trans } = useLocales();
-	const { buttons, list } = trans;
+	const { buttons } = trans;
 	const dispatch = useDispatch();
 
 	const handleDelete = () => {
@@ -17,7 +18,7 @@ const ListItem = ({ name, id, done }) => {
 		dispatch(doneTodo(id));
 	};
 	return (
-		<li>
+		<ListIt>
 			<p>{name}</p>
 			<div>
 				{!done && (
@@ -39,7 +40,7 @@ const ListItem = ({ name, id, done }) => {
 					{buttons.delete}
 				</Button>
 			</div>
-		</li>
+		</ListIt>
 	);
 };
 

@@ -16,9 +16,6 @@ export const ru = {
 		delete: 'Удалить',
 		create: 'Создать',
 	},
-	list: {
-		noTodo: 'Заданий нет',
-	},
 	form: {
 		newTodo: 'Новое задание',
 		placeholder: 'Название',
@@ -41,9 +38,6 @@ export const en = {
 		done: 'Done',
 		delete: 'Delete',
 		create: 'Create',
-	},
-	list: {
-		noTodo: 'No tasks',
 	},
 	form: {
 		newTodo: 'New task',

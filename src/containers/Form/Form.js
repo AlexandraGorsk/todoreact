@@ -11,7 +11,7 @@ const FormContainer = styled('form')`
 	padding: 12px 16px;
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: ${(props) => props.theme.backgroundColor.paper};
 	border-radius: 8px;
 
 	> div {

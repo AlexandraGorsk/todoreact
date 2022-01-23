@@ -14,6 +14,7 @@ const TodoList = styled('div')`
 	max-width: 600px;
 	box-sizing: border-box;
 	border: 2px solid gray;
+	background-color: ${(props) => props.theme.backgroundColor.main};
 `;
 
 const TodoListContainer = () => {
