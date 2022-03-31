@@ -2,9 +2,10 @@ import {
 	CREATE_TODO,
 	DONE,
 	DELETE,
-	UPDATE,
+	// UPDATE,
 	SET_FILTER_STATUS,
 	SET_FILTER_VALUE,
+	EDIT,
 } from './todo.actions';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -40,8 +41,15 @@ export const todoReducer = (state = initialState, action) => {
 					state.todoList.filter((todo) => todo.id === action.payload)
 				),
 			};
-		case UPDATE:
-			return { ...state };
+		case EDIT:
+			return {
+				...state,
+				todoList: state.todoList.map((todo) =>
+					todo.id === action.payload.id
+						? { ...todo, title: action.payload.newName }
+						: todo
+				),
+			};
 		case SET_FILTER_STATUS:
 			return {
 				...state,

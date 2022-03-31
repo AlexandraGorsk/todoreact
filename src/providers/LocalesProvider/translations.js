@@ -15,10 +15,15 @@ export const ru = {
 		done: 'Выполнено',
 		delete: 'Удалить',
 		create: 'Создать',
+		edit: 'Изменить',
 	},
 	form: {
 		newTodo: 'Новое задание',
 		placeholder: 'Название',
+	},
+	modal: {
+		new: 'Введите исправленное задание',
+		button: 'Изменить',
 	},
 };
 export const en = {
@@ -38,10 +43,15 @@ export const en = {
 		done: 'Done',
 		delete: 'Delete',
 		create: 'Create',
+		edit: 'Change',
 	},
 	form: {
 		newTodo: 'New task',
 		placeholder: 'Name',
+	},
+	modal: {
+		new: 'Enter changed todo',
+		button: 'Edit',
 	},
 };
 export const langs = { ru, en };
